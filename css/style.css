@@ -667,7 +667,9 @@ a {
 
     flex-wrap: wrap;
 
-    gap: 13px;
+    align-items: center;
+
+    gap: 16px;
 }
 
 
