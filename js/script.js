@@ -1,333 +1,122 @@
 /* =========================================================
    MUZAMMIL GULAB NADAF
-   PERSONAL PORTFOLIO WEBSITE
-   MAIN JAVASCRIPT
+   PERSONAL PORTFOLIO
+   COMPLETE JAVASCRIPT
 ========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
 
     /* =====================================================
-       ELEMENT REFERENCES
+       01. ELEMENT REFERENCES
     ===================================================== */
 
-    const navLinks = Array.from(
-        document.querySelectorAll(".nav-menu a[href^='#']")
-    );
+    const sections =
+        document.querySelectorAll("section[id]");
 
-    const sections = Array.from(
+    const navLinks =
+        document.querySelectorAll(".nav-menu a");
+
+    const navbar =
+        document.querySelector(".navbar");
+
+    const terminalCard =
+        document.querySelector(".terminal-card");
+
+    const terminalStatus =
+        document.querySelector(".terminal-success");
+
+    const statsSection =
+        document.querySelector(".stats");
+
+    const statElements =
         document.querySelectorAll(
-            "main section[id]"
-        )
-    );
-
-    const navbar = document.querySelector(".navbar");
-
-
-
-    /* =====================================================
-       CONFIGURATION
-    ===================================================== */
-
-    const ACTIVE_OFFSET = 140;
-
-    const SECTION_IDS = [
-        "about",
-        "experience",
-        "projects",
-        "playbook",
-        "skills",
-        "services",
-        "contact"
-    ];
-
-
-
-    /* =====================================================
-       GET NAV LINK FOR SECTION
-    ===================================================== */
-
-    function getNavLink(sectionId) {
-
-        return navLinks.find(
-            link =>
-                link.getAttribute("href") === `#${sectionId}`
+            ".stat-item strong"
         );
 
-    }
+    const projectCards =
+        document.querySelectorAll(
+            ".project-card"
+        );
 
+    const serviceCards =
+        document.querySelectorAll(
+            ".service-card"
+        );
 
 
     /* =====================================================
-       SET ACTIVE NAVIGATION ITEM
+       02. ACTIVE NAVIGATION
     ===================================================== */
 
-    function setActiveNav(sectionId) {
+    function updateActiveNavigation() {
+
+        let currentSection = "";
+
+        sections.forEach(section => {
+
+            const sectionTop =
+                section.offsetTop - 140;
+
+            const sectionHeight =
+                section.offsetHeight;
+
+            if (
+                window.scrollY >= sectionTop &&
+                window.scrollY <
+                    sectionTop + sectionHeight
+            ) {
+
+                currentSection =
+                    section.getAttribute("id");
+
+            }
+
+        });
+
 
         navLinks.forEach(link => {
 
             link.classList.remove("active");
 
-        });
-
-
-        const activeLink = getNavLink(sectionId);
-
-        if (activeLink) {
-
-            activeLink.classList.add("active");
-
-        }
-
-    }
-
-
-
-    /* =====================================================
-       DETERMINE CURRENT SECTION
-    ===================================================== */
-
-    function getCurrentSection() {
-
-        const scrollPosition =
-            window.scrollY + ACTIVE_OFFSET;
-
-
-        let currentSection = null;
-
-
-        /*
-         * Check sections from top to bottom.
-         *
-         * The last section whose top has been crossed
-         * becomes the current section.
-         */
-
-        sections.forEach(section => {
-
-            const sectionTop =
-                section.getBoundingClientRect().top +
-                window.scrollY;
-
-
-            if (scrollPosition >= sectionTop) {
-
-                currentSection = section.id;
-
-            }
-
-        });
-
-
-        /*
-         * IMPORTANT:
-         *
-         * Contact is the final section.
-         * When the user reaches the bottom of the page,
-         * Contact MUST become active.
-         */
-
-        const viewportBottom =
-            window.scrollY + window.innerHeight;
-
-        const documentBottom =
-            document.documentElement.scrollHeight;
-
-
-        if (
-            viewportBottom >=
-            documentBottom - 10
-        ) {
-
-            currentSection = "contact";
-
-        }
-
-
-        return currentSection;
-
-    }
-
-
-
-    /* =====================================================
-       UPDATE ACTIVE NAVIGATION
-    ===================================================== */
-
-    function updateActiveNavigation() {
-
-        const currentSection =
-            getCurrentSection();
-
-
-        if (currentSection) {
-
-            setActiveNav(currentSection);
-
-        }
-
-    }
-
-
-
-    /* =====================================================
-       NAVIGATION CLICK HANDLER
-    ===================================================== */
-
-    navLinks.forEach(link => {
-
-        link.addEventListener("click", event => {
-
-            const targetId =
-                link.getAttribute("href");
-
-
             if (
-                !targetId ||
-                !targetId.startsWith("#")
+                link.getAttribute("href") ===
+                `#${currentSection}`
             ) {
 
-                return;
+                link.classList.add("active");
 
             }
-
-
-            const targetSection =
-                document.querySelector(targetId);
-
-
-            if (!targetSection) {
-
-                return;
-
-            }
-
-
-            event.preventDefault();
-
-
-            /*
-             * Immediately update the active item.
-             */
-
-            setActiveNav(
-                targetSection.id
-            );
-
-
-            /*
-             * Calculate scroll position.
-             *
-             * The navbar is fixed, so we leave some
-             * space above the section heading.
-             */
-
-            const navbarHeight =
-                navbar
-                    ? navbar.offsetHeight
-                    : 0;
-
-
-            const targetPosition =
-                targetSection.getBoundingClientRect().top +
-                window.scrollY -
-                navbarHeight -
-                20;
-
-
-            window.scrollTo({
-
-                top: Math.max(
-                    targetPosition,
-                    0
-                ),
-
-                behavior: "smooth"
-
-            });
 
         });
-
-    });
-
-
-
-    /* =====================================================
-       LOGO → HOME
-    ===================================================== */
-
-    const logo =
-        document.querySelector(".logo");
-
-
-    if (logo) {
-
-        logo.addEventListener(
-            "click",
-            event => {
-
-                const homeSection =
-                    document.querySelector("#home");
-
-
-                if (!homeSection) {
-
-                    return;
-
-                }
-
-
-                event.preventDefault();
-
-
-                window.scrollTo({
-
-                    top: 0,
-
-                    behavior: "smooth"
-
-                });
-
-
-                /*
-                 * No "Home" navigation item currently exists,
-                 * so remove any section highlight when returning
-                 * to the top of the page.
-                 */
-
-                navLinks.forEach(link => {
-
-                    link.classList.remove("active");
-
-                });
-
-            }
-        );
 
     }
 
 
+    window.addEventListener(
+        "scroll",
+        updateActiveNavigation,
+        { passive: true }
+    );
+
+
+    updateActiveNavigation();
+
 
     /* =====================================================
-       SCROLL HANDLER
+       03. GLASS NAVBAR SCROLL EFFECT
     ===================================================== */
 
-    let scrollTicking = false;
+    function updateNavbar() {
 
+        if (!navbar) return;
 
-    function handleScroll() {
+        if (window.scrollY > 40) {
 
-        if (!scrollTicking) {
+            navbar.classList.add("scrolled");
 
-            window.requestAnimationFrame(() => {
+        } else {
 
-                updateActiveNavigation();
-
-                scrollTicking = false;
-
-            });
-
-
-            scrollTicking = true;
+            navbar.classList.remove("scrolled");
 
         }
 
@@ -336,111 +125,499 @@ document.addEventListener("DOMContentLoaded", () => {
 
     window.addEventListener(
         "scroll",
-        handleScroll,
-        {
-            passive: true
-        }
+        updateNavbar,
+        { passive: true }
     );
 
 
-
-    /* =====================================================
-       RESIZE HANDLER
-    ===================================================== */
-
-    let resizeTimeout;
-
-
-    window.addEventListener(
-        "resize",
-        () => {
-
-            clearTimeout(
-                resizeTimeout
-            );
-
-
-            resizeTimeout = setTimeout(
-                () => {
-
-                    updateActiveNavigation();
-
-                },
-                150
-            );
-
-        }
-    );
-
+    updateNavbar();
 
 
     /* =====================================================
-       INITIAL ACTIVE NAVIGATION
-    ===================================================== */
-
-    updateActiveNavigation();
-
-
-
-    /* =====================================================
-       SCROLL REVEAL
-       
-       This section only activates if elements with
-       the "reveal" class exist.
-       
-       Therefore it will not interfere with the current
-       website if your CSS/HTML doesn't use it yet.
+       04. SCROLL REVEAL
     ===================================================== */
 
     const revealElements =
         document.querySelectorAll(
-            ".reveal"
+            ".section-heading, " +
+            ".about-main, " +
+            ".about-focus, " +
+            ".timeline-item, " +
+            ".project-card, " +
+            ".playbook-card, " +
+            ".skill-group, " +
+            ".service-card, " +
+            ".contact-container"
         );
 
 
+    revealElements.forEach(element => {
+
+        element.classList.add("reveal");
+
+    });
+
+
     if (
-        revealElements.length > 0 &&
-        "IntersectionObserver" in window
+        "IntersectionObserver"
+        in window
     ) {
 
         const revealObserver =
             new IntersectionObserver(
                 entries => {
 
-                    entries.forEach(
-                        entry => {
+                    entries.forEach(entry => {
 
-                            if (
-                                entry.isIntersecting
-                            ) {
+                        if (
+                            entry.isIntersecting
+                        ) {
 
-                                entry.target.classList.add(
-                                    "visible"
-                                );
+                            entry.target
+                                .classList
+                                .add("visible");
 
-
-                                revealObserver.unobserve(
-                                    entry.target
-                                );
-
-                            }
+                            revealObserver.unobserve(
+                                entry.target
+                            );
 
                         }
-                    );
+
+                    });
 
                 },
                 {
-                    threshold: 0.12
+                    threshold: 0.12,
+
+                    rootMargin:
+                        "0px 0px -50px 0px"
                 }
             );
 
 
-        revealElements.forEach(
-            element => {
+        revealElements.forEach(element => {
 
-                revealObserver.observe(
-                    element
+            revealObserver.observe(
+                element
+            );
+
+        });
+
+    } else {
+
+        revealElements.forEach(element => {
+
+            element.classList.add(
+                "visible"
+            );
+
+        });
+
+    }
+
+
+    /* =====================================================
+       05. STAGGER PROJECT CARDS
+    ===================================================== */
+
+    projectCards.forEach(
+        (card, index) => {
+
+            card.style.transitionDelay =
+                `${index * 70}ms`;
+
+        }
+    );
+
+
+    /* =====================================================
+       06. STAGGER SERVICE CARDS
+    ===================================================== */
+
+    serviceCards.forEach(
+        (card, index) => {
+
+            card.style.transitionDelay =
+                `${index * 70}ms`;
+
+        }
+    );
+
+
+    /* =====================================================
+       07. ANIMATED STATISTICS
+    ===================================================== */
+
+    function animateCounter(element) {
+
+        const originalText =
+            element.textContent.trim();
+
+        const numberMatch =
+            originalText.match(/[\d.]+/);
+
+        if (!numberMatch) return;
+
+        const target =
+            parseFloat(
+                numberMatch[0]
+            );
+
+        const numberStart =
+            originalText.indexOf(
+                numberMatch[0]
+            );
+
+        const prefix =
+            originalText.substring(
+                0,
+                numberStart
+            );
+
+        const suffix =
+            originalText.substring(
+                numberStart +
+                numberMatch[0].length
+            );
+
+        const decimalPlaces =
+            numberMatch[0].includes(".")
+                ? numberMatch[0]
+                    .split(".")[1]
+                    .length
+                : 0;
+
+        const duration = 1400;
+
+        const startTime =
+            performance.now();
+
+
+        function updateCounter(
+            currentTime
+        ) {
+
+            const elapsed =
+                currentTime -
+                startTime;
+
+            const progress =
+                Math.min(
+                    elapsed /
+                        duration,
+                    1
                 );
+
+            const easedProgress =
+                1 -
+                Math.pow(
+                    1 - progress,
+                    3
+                );
+
+            const currentValue =
+                target *
+                easedProgress;
+
+
+            element.textContent =
+                prefix +
+                currentValue.toFixed(
+                    decimalPlaces
+                ) +
+                suffix;
+
+
+            if (progress < 1) {
+
+                requestAnimationFrame(
+                    updateCounter
+                );
+
+            } else {
+
+                element.textContent =
+                    originalText;
+
+            }
+
+        }
+
+
+        requestAnimationFrame(
+            updateCounter
+        );
+
+    }
+
+
+    if (
+        statsSection &&
+        statElements.length &&
+        "IntersectionObserver"
+        in window
+    ) {
+
+        const statsObserver =
+            new IntersectionObserver(
+                entries => {
+
+                    entries.forEach(entry => {
+
+                        if (
+                            entry.isIntersecting
+                        ) {
+
+                            statElements.forEach(
+                                animateCounter
+                            );
+
+                            statsObserver.unobserve(
+                                entry.target
+                            );
+
+                        }
+
+                    });
+
+                },
+                {
+                    threshold: 0.35
+                }
+            );
+
+
+        statsObserver.observe(
+            statsSection
+        );
+
+    }
+
+
+    /* =====================================================
+       08. SMOOTH INTERNAL LINKS
+    ===================================================== */
+
+    const internalLinks =
+        document.querySelectorAll(
+            'a[href^="#"]'
+        );
+
+
+    internalLinks.forEach(link => {
+
+        link.addEventListener(
+            "click",
+            event => {
+
+                const targetId =
+                    link.getAttribute(
+                        "href"
+                    );
+
+                if (
+                    !targetId ||
+                    targetId === "#"
+                ) {
+
+                    return;
+
+                }
+
+
+                const target =
+                    document.querySelector(
+                        targetId
+                    );
+
+
+                if (!target) return;
+
+
+                event.preventDefault();
+
+
+                target.scrollIntoView({
+
+                    behavior:
+                        "smooth",
+
+                    block:
+                        "start"
+
+                });
+
+            }
+        );
+
+    });
+
+
+    /* =====================================================
+       09. TERMINAL TYPING EFFECT
+    ===================================================== */
+
+    if (terminalStatus) {
+
+        /*
+         * Store the original text BEFORE
+         * clearing the element.
+         */
+
+        const originalStatus =
+            terminalStatus.textContent
+                .replace(/\s+/g, " ")
+                .trim();
+
+
+        /*
+         * Clear the visible text.
+         */
+
+        terminalStatus.textContent = "";
+
+
+        let characterIndex = 0;
+
+
+        function typeStatus() {
+
+            if (
+                characterIndex <
+                originalStatus.length
+            ) {
+
+                terminalStatus.textContent +=
+                    originalStatus.charAt(
+                        characterIndex
+                    );
+
+
+                characterIndex++;
+
+
+                setTimeout(
+                    typeStatus,
+                    55
+                );
+
+            }
+
+        }
+
+
+        /*
+         * Start typing after a short delay.
+         */
+
+        setTimeout(
+            typeStatus,
+            700
+        );
+
+    }
+
+
+    /* =====================================================
+       10. TERMINAL CARD 3D MOUSE TILT
+    ===================================================== */
+
+    if (terminalCard) {
+
+        /*
+         * Only enable the 3D effect on
+         * desktop-sized screens.
+         */
+
+        terminalCard.addEventListener(
+            "mousemove",
+            event => {
+
+                if (
+                    window.innerWidth < 800
+                ) {
+
+                    return;
+
+                }
+
+
+                const rect =
+                    terminalCard
+                        .getBoundingClientRect();
+
+
+                /*
+                 * Mouse position inside card.
+                 */
+
+                const mouseX =
+                    event.clientX -
+                    rect.left;
+
+
+                const mouseY =
+                    event.clientY -
+                    rect.top;
+
+
+                /*
+                 * Convert mouse position
+                 * into a range of -1 to +1.
+                 */
+
+                const percentX =
+                    (mouseX /
+                        rect.width) -
+                    0.5;
+
+
+                const percentY =
+                    (mouseY /
+                        rect.height) -
+                    0.5;
+
+
+                /*
+                 * Maximum tilt.
+                 *
+                 * Increase these values if
+                 * you want a stronger effect.
+                 */
+
+                const rotateY =
+                    percentX * 12;
+
+
+                const rotateX =
+                    percentY * -12;
+
+
+                /*
+                 * Apply the actual 3D transform.
+                 */
+
+                terminalCard.style.transform =
+                    `perspective(1000px)
+                     rotateX(${rotateX}deg)
+                     rotateY(${rotateY}deg)
+                     translateZ(8px)`;
+
+            }
+        );
+
+
+        /*
+         * Reset the card when the
+         * mouse leaves it.
+         */
+
+        terminalCard.addEventListener(
+            "mouseleave",
+            () => {
+
+                terminalCard.style.transform =
+                    "perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0)";
 
             }
         );
@@ -448,142 +625,110 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
+    /* =====================================================
+       11. PROJECT CARD INTERACTION
+    ===================================================== */
+
+    projectCards.forEach(card => {
+
+        card.addEventListener(
+            "mouseenter",
+            () => {
+
+                card.classList.add(
+                    "project-hover"
+                );
+
+            }
+        );
+
+
+        card.addEventListener(
+            "mouseleave",
+            () => {
+
+                card.classList.remove(
+                    "project-hover"
+                );
+
+            }
+        );
+
+    });
+
 
     /* =====================================================
-       EXTERNAL LINKS
-       
-       Adds safe target behaviour to external links
-       that open in a new tab.
+       12. CURRENT YEAR
+    ===================================================== */
+
+    const footerParagraphs =
+        document.querySelectorAll(
+            ".footer p"
+        );
+
+
+    if (
+        footerParagraphs.length
+    ) {
+
+        footerParagraphs.forEach(
+            paragraph => {
+
+                paragraph.innerHTML =
+                    paragraph.innerHTML.replace(
+                        /©\s*2026/,
+                        `© ${new Date()
+                            .getFullYear()}`
+                    );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       13. EXTERNAL LINKS
     ===================================================== */
 
     const externalLinks =
         document.querySelectorAll(
-            "a[target='_blank']"
+            'a[href^="http"]'
         );
 
 
     externalLinks.forEach(link => {
 
-        const existingRel =
-            link.getAttribute("rel") || "";
-
-
-        const relValues =
-            existingRel
-                .split(" ")
-                .filter(Boolean);
-
-
         if (
-            !relValues.includes("noopener")
+            !link.hasAttribute("target")
         ) {
 
-            relValues.push("noopener");
-
-        }
-
-
-        if (
-            !relValues.includes("noreferrer")
-        ) {
-
-            relValues.push("noreferrer");
+            link.setAttribute(
+                "target",
+                "_blank"
+            );
 
         }
 
 
         link.setAttribute(
             "rel",
-            relValues.join(" ")
+            "noopener noreferrer"
         );
 
     });
 
 
-
     /* =====================================================
-       KEYBOARD ACCESSIBILITY
-       
-       Allows ESC to remove active navigation state
-       only when appropriate. Does not interfere with
-       normal page navigation.
+       14. PAGE LOADED
     ===================================================== */
 
-    document.addEventListener(
-        "keydown",
-        event => {
+    requestAnimationFrame(() => {
 
-            if (event.key !== "Escape") {
-
-                return;
-
-            }
-
-
-            /*
-             * If focus is inside a navigation link,
-             * return focus to the body.
-             */
-
-            if (
-                document.activeElement &&
-                document.activeElement.closest(
-                    ".nav-menu"
-                )
-            ) {
-
-                document.activeElement.blur();
-
-            }
-
-        }
-    );
-
-
-
-    /* =====================================================
-       DEBUG / DEVELOPMENT CHECK
-       
-       These warnings help identify broken section links
-       during development without affecting the website.
-    ===================================================== */
-
-    navLinks.forEach(link => {
-
-        const href =
-            link.getAttribute("href");
-
-
-        if (
-            href &&
-            href.startsWith("#") &&
-            href !== "#"
-        ) {
-
-            const target =
-                document.querySelector(href);
-
-
-            if (!target) {
-
-                console.warn(
-                    `Navigation target not found: ${href}`
-                );
-
-            }
-
-        }
+        document.body.classList.add(
+            "page-loaded"
+        );
 
     });
-
-
-
-    /* =====================================================
-       READY
-    ===================================================== */
-
-    console.log(
-        "Muzammil Nadaf portfolio initialized successfully."
-    );
 
 });
