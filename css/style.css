@@ -117,18 +117,90 @@ a {
    04. NAVIGATION
 ========================================================= */
 
+/* =========================================================
+   GLASSMORPHIC NAVIGATION
+========================================================= */
+
 .navbar {
 
     position: sticky;
+
     top: 0;
+
     z-index: 1000;
 
-    background: rgba(7, 17, 31, 0.88);
+    /* Glass background */
+    background:
+        linear-gradient(
+            135deg,
+            rgba(15, 30, 50, 0.72),
+            rgba(7, 17, 31, 0.58)
+        );
 
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+    /* Stronger glass blur */
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
 
-    border-bottom: 1px solid var(--border);
+    /* Glass edge */
+    border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+
+    /* Subtle depth */
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.16);
+
+    /* Prevent background artifacts */
+    isolation: isolate;
+
+    transition:
+        background 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+
+/* Subtle glass highlight across the top */
+
+.navbar::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.16),
+            transparent
+        );
+
+    pointer-events: none;
+}
+
+
+/* Stronger glass effect after scrolling */
+
+.navbar.scrolled {
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(13, 29, 49, 0.84),
+            rgba(5, 14, 26, 0.78)
+        );
+
+    border-bottom-color:
+        rgba(56, 189, 248, 0.18);
+
+    box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.28),
+        0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
 
@@ -168,17 +240,43 @@ a {
 
 .nav-menu a {
 
+    position: relative;
+
     color: var(--text-secondary);
 
     font-size: 0.9rem;
+
     font-weight: 500;
 
-    transition: var(--transition);
+    padding: 7px 11px;
+
+    border-radius: 7px;
+
+    transition:
+        color 0.3s ease,
+        background 0.3s ease;
 }
 
 
 .nav-menu a:hover {
+
     color: var(--accent);
+
+    background:
+        rgba(56, 189, 248, 0.07);
+}
+
+
+.nav-menu a.active {
+
+    color: var(--accent);
+
+    background:
+        rgba(56, 189, 248, 0.09);
+
+    box-shadow:
+        inset 0 0 0 1px
+        rgba(56, 189, 248, 0.08);
 }
 
 
@@ -1782,14 +1880,6 @@ a {
 
     color: var(--accent);
 
-}
-
-
-.navbar.scrolled {
-
-    box-shadow:
-        0 10px 40px
-        rgba(0, 0, 0, 0.18);
 }
 
 
