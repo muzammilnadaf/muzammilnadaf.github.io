@@ -454,179 +454,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =====================================================
-       09. TERMINAL TYPING EFFECT
-    ===================================================== */
-
-    if (terminalStatus) {
-
-        /*
-         * Store the original text BEFORE
-         * clearing the element.
-         */
-
-        const originalStatus =
-            terminalStatus.textContent
-                .replace(/\s+/g, " ")
-                .trim();
-
-
-        /*
-         * Clear the visible text.
-         */
-
-        terminalStatus.textContent = "";
-
-
-        let characterIndex = 0;
-
-
-        function typeStatus() {
-
-            if (
-                characterIndex <
-                originalStatus.length
-            ) {
-
-                terminalStatus.textContent +=
-                    originalStatus.charAt(
-                        characterIndex
-                    );
-
-
-                characterIndex++;
-
-
-                setTimeout(
-                    typeStatus,
-                    55
-                );
-
-            }
-
-        }
-
-
-        /*
-         * Start typing after a short delay.
-         */
-
-        setTimeout(
-            typeStatus,
-            700
-        );
-
-    }
-
-
-    /* =====================================================
-       10. TERMINAL CARD 3D MOUSE TILT
-    ===================================================== */
-
-    if (terminalCard) {
-
-        /*
-         * Only enable the 3D effect on
-         * desktop-sized screens.
-         */
-
-        terminalCard.addEventListener(
-            "mousemove",
-            event => {
-
-                if (
-                    window.innerWidth < 800
-                ) {
-
-                    return;
-
-                }
-
-
-                const rect =
-                    terminalCard
-                        .getBoundingClientRect();
-
-
-                /*
-                 * Mouse position inside card.
-                 */
-
-                const mouseX =
-                    event.clientX -
-                    rect.left;
-
-
-                const mouseY =
-                    event.clientY -
-                    rect.top;
-
-
-                /*
-                 * Convert mouse position
-                 * into a range of -1 to +1.
-                 */
-
-                const percentX =
-                    (mouseX /
-                        rect.width) -
-                    0.5;
-
-
-                const percentY =
-                    (mouseY /
-                        rect.height) -
-                    0.5;
-
-
-                /*
-                 * Maximum tilt.
-                 *
-                 * Increase these values if
-                 * you want a stronger effect.
-                 */
-
-                const rotateY =
-                    percentX * 12;
-
-
-                const rotateX =
-                    percentY * -12;
-
-
-                /*
-                 * Apply the actual 3D transform.
-                 */
-
-                terminalCard.style.transform =
-                    `perspective(1000px)
-                     rotateX(${rotateX}deg)
-                     rotateY(${rotateY}deg)
-                     translateZ(8px)`;
-
-            }
-        );
-
-
-        /*
-         * Reset the card when the
-         * mouse leaves it.
-         */
-
-        terminalCard.addEventListener(
-            "mouseleave",
-            () => {
-
-                terminalCard.style.transform =
-                    "perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0)";
-
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       11. PROJECT CARD INTERACTION
+       09. PROJECT CARD INTERACTION
     ===================================================== */
 
     projectCards.forEach(card => {
@@ -658,7 +486,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =====================================================
-       12. CURRENT YEAR
+       10. CURRENT YEAR
     ===================================================== */
 
     const footerParagraphs =
@@ -688,7 +516,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =====================================================
-       13. EXTERNAL LINKS
+       11. EXTERNAL LINKS
     ===================================================== */
 
     const externalLinks =
@@ -720,7 +548,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =====================================================
-       14. PAGE LOADED
+       12. PAGE LOADED
     ===================================================== */
 
     requestAnimationFrame(() => {
@@ -732,3 +560,272 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 });
+
+/* =========================================================
+   13. TERMINAL TYPING + 3D TILT
+========================================================= */
+
+(function () {
+
+    /*
+     * Wait until the complete page is loaded.
+     */
+
+    function initializeTerminalEffects() {
+
+        const terminal =
+            document.querySelector(
+                ".terminal-card"
+            );
+
+        const status =
+            document.querySelector(
+                "#freelance-status"
+            );
+
+
+        /*
+         * Stop safely if the elements
+         * don't exist.
+         */
+
+        if (!terminal || !status) {
+
+            console.warn(
+                "Terminal elements not found."
+            );
+
+            return;
+
+        }
+
+
+        /* =================================================
+           14. TYPING EFFECT
+        ================================================= */
+
+        const text =
+            status.dataset.text ||
+            "✓ Available for freelance";
+
+
+        /*
+         * Make absolutely sure the element
+         * starts empty.
+         */
+
+        status.textContent = "";
+
+        status.classList.add(
+            "typing"
+        );
+
+
+        let index = 0;
+
+
+        function typeNextCharacter() {
+
+            if (
+                index < text.length
+            ) {
+
+                status.textContent +=
+                    text.charAt(index);
+
+                index++;
+
+
+                setTimeout(
+                    typeNextCharacter,
+                    55
+                );
+
+            } else {
+
+                /*
+                 * Typing finished.
+                 */
+
+                status.classList.remove(
+                    "typing"
+                );
+
+                status.classList.add(
+                    "typed"
+                );
+
+            }
+
+        }
+
+
+        /*
+         * Start after 500 ms.
+         */
+
+        setTimeout(
+            typeNextCharacter,
+            500
+        );
+
+
+        /* =================================================
+           15. 3D MOUSE TILT
+        ================================================= */
+
+        terminal.addEventListener(
+            "mousemove",
+            function (event) {
+
+                /*
+                 * Don't run this effect
+                 * on small screens.
+                 */
+
+                if (
+                    window.innerWidth < 800
+                ) {
+
+                    return;
+
+                }
+
+
+                const rect =
+                    terminal.getBoundingClientRect();
+
+
+                /*
+                 * Mouse position inside
+                 * the terminal.
+                 */
+
+                const mouseX =
+                    event.clientX -
+                    rect.left;
+
+                const mouseY =
+                    event.clientY -
+                    rect.top;
+
+
+                /*
+                 * Convert mouse position
+                 * to -1 ... +1.
+                 *
+                 * -1 = left / top
+                 *  0 = center
+                 * +1 = right / bottom
+                 */
+
+                const normalizedX =
+                    (mouseX /
+                        rect.width) * 2 - 1;
+
+
+                const normalizedY =
+                    (mouseY /
+                        rect.height) * 2 - 1;
+
+
+                /*
+                 * Maximum rotation.
+                 *
+                 * Increase from 12 to 15
+                 * if you want it even stronger.
+                 */
+
+                const maxTilt = 12;
+
+
+                /*
+                 * Mouse on RIGHT
+                 * -> terminal rotates right.
+                 *
+                 * Mouse on LEFT
+                 * -> terminal rotates left.
+                 */
+
+                const rotateY =
+                    normalizedX *
+                    maxTilt;
+
+
+                /*
+                 * Mouse on TOP
+                 * -> terminal tilts toward top.
+                 *
+                 * Mouse on BOTTOM
+                 * -> terminal tilts toward bottom.
+                 */
+
+                const rotateX =
+                    normalizedY *
+                    -maxTilt;
+
+
+                /*
+                 * Apply the 3D transform.
+                 */
+
+                terminal.style.transform =
+                    `perspective(1000px)
+                     rotateX(${rotateX}deg)
+                     rotateY(${rotateY}deg)
+                     translateZ(8px)`;
+
+
+                terminal.classList.add(
+                    "is-tilting"
+                );
+
+            }
+        );
+
+
+        /* =================================================
+           16. RESET WHEN MOUSE LEAVES
+        ================================================= */
+
+        terminal.addEventListener(
+            "mouseleave",
+            function () {
+
+                terminal.style.transform =
+                    "perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0)";
+
+
+                terminal.classList.remove(
+                    "is-tilting"
+                );
+
+            }
+        );
+
+    }
+
+
+    /*
+     * DOMContentLoaded may already have
+     * happened if this script is loaded
+     * dynamically, so handle both cases.
+     */
+
+    if (
+        document.readyState ===
+        "loading"
+    ) {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            initializeTerminalEffects
+        );
+
+    } else {
+
+        initializeTerminalEffects();
+
+    }
+
+})();
