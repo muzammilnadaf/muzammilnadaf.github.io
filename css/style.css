@@ -814,14 +814,15 @@ p {
 
 
 /* =========================================================
-   TERMINAL CARD
+   06. TERMINAL CARD
 ========================================================= */
 
 .terminal-card {
-
     position: relative;
 
     z-index: 2;
+
+    width: 100%;
 
     overflow: hidden;
 
@@ -835,11 +836,8 @@ p {
         rgba(10, 24, 42, 0.82);
 
     box-shadow:
-        0 30px 80px
-        rgba(0, 0, 0, 0.25),
-
-        inset 0 1px 0
-        rgba(255, 255, 255, 0.025);
+        0 30px 80px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.025);
 
     backdrop-filter:
         blur(16px);
@@ -847,8 +845,42 @@ p {
     -webkit-backdrop-filter:
         blur(16px);
 
+    /* IMPORTANT:
+       Required for the JavaScript parallax movement */
+    transform:
+        perspective(1000px)
+        rotateX(0deg)
+        rotateY(0deg);
+
+    transition:
+        transform 0.18s ease-out,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+
+    will-change:
+        transform;
+
 }
 
+
+/* Terminal hover glow */
+
+.terminal-card:hover {
+
+    border-color:
+        rgba(56, 189, 248, 0.28);
+
+    box-shadow:
+        0 35px 90px rgba(0, 0, 0, 0.30),
+        0 0 35px rgba(56, 189, 248, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.035);
+
+}
+
+
+/* =========================================================
+   TERMINAL HEADER
+========================================================= */
 
 .terminal-header {
 
@@ -877,6 +909,8 @@ p {
 
     display: flex;
 
+    align-items: center;
+
     gap: 6px;
 
 }
@@ -885,6 +919,7 @@ p {
 .terminal-dots span {
 
     width: 8px;
+
     height: 8px;
 
     border-radius: 50%;
@@ -892,6 +927,21 @@ p {
     background:
         #64748b;
 
+}
+
+
+.terminal-dots span:first-child {
+    background: #ef4444;
+}
+
+
+.terminal-dots span:nth-child(2) {
+    background: #f59e0b;
+}
+
+
+.terminal-dots span:nth-child(3) {
+    background: #22c55e;
 }
 
 
@@ -908,6 +958,10 @@ p {
 
 }
 
+
+/* =========================================================
+   TERMINAL BODY
+========================================================= */
 
 .terminal-body {
 
@@ -955,11 +1009,65 @@ p {
 
 .terminal-success {
 
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
     color:
         var(--success);
 
     font-weight:
         700;
+
+    min-height:
+        24px;
+
+}
+
+
+/* Cursor for typing effect */
+
+.terminal-success::after {
+
+    content:
+        "";
+
+    display:
+        inline-block;
+
+    width:
+        7px;
+
+    height:
+        15px;
+
+    margin-left:
+        6px;
+
+    background:
+        var(--success);
+
+    animation:
+        terminalCursor 0.8s
+        steps(1)
+        infinite;
+
+}
+
+
+@keyframes terminalCursor {
+
+    0%,
+    50% {
+        opacity: 1;
+    }
+
+    51%,
+    100% {
+        opacity: 0;
+    }
 
 }
 
