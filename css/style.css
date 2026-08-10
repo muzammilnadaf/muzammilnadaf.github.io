@@ -1753,3 +1753,72 @@ a {
     }
 
 }
+
+/* =========================================================
+   JAVASCRIPT ANIMATIONS
+========================================================= */
+
+.reveal {
+
+    opacity: 0;
+
+    transform: translateY(25px);
+
+    transition:
+        opacity 0.7s ease,
+        transform 0.7s ease;
+}
+
+
+.reveal.visible {
+
+    opacity: 1;
+
+    transform: translateY(0);
+}
+
+
+.nav-menu a.active {
+
+    color: var(--accent);
+
+}
+
+
+.navbar.scrolled {
+
+    box-shadow:
+        0 10px 40px
+        rgba(0, 0, 0, 0.18);
+}
+
+
+.project-card.project-hover {
+
+    border-color: var(--border-accent);
+
+}
+
+
+.page-loaded {
+
+    animation:
+        pageFadeIn 0.6s ease;
+}
+
+
+@keyframes pageFadeIn {
+
+    from {
+
+        opacity: 0;
+
+    }
+
+    to {
+
+        opacity: 1;
+
+    }
+
+}
