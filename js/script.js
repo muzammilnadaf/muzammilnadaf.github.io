@@ -1,16 +1,46 @@
 /* =========================================================
    MUZAMMIL GULAB NADAF — PERSONAL PORTFOLIO
-   JavaScript
+   Complete JavaScript
 ========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
 
+
     /* =====================================================
-       01. NAVIGATION — ACTIVE SECTION
+       01. ELEMENT REFERENCES
     ===================================================== */
 
-    const sections = document.querySelectorAll("section[id]");
-    const navLinks = document.querySelectorAll(".nav-menu a");
+    const sections =
+        document.querySelectorAll("section[id]");
+
+    const navLinks =
+        document.querySelectorAll(".nav-menu a");
+
+    const navbar =
+        document.querySelector(".navbar");
+
+    const terminalCard =
+        document.querySelector(".terminal-card");
+
+    const terminalStatus =
+        document.querySelector(".terminal-success");
+
+    const statsSection =
+        document.querySelector(".stats");
+
+    const statElements =
+        document.querySelectorAll(".stat-item strong");
+
+    const projectCards =
+        document.querySelectorAll(".project-card");
+
+    const serviceCards =
+        document.querySelectorAll(".service-card");
+
+
+    /* =====================================================
+       02. ACTIVE NAVIGATION
+    ===================================================== */
 
     const updateActiveNavigation = () => {
 
@@ -18,31 +48,43 @@ document.addEventListener("DOMContentLoaded", () => {
 
         sections.forEach(section => {
 
-            const sectionTop = section.offsetTop - 140;
-            const sectionHeight = section.offsetHeight;
+            const sectionTop =
+                section.offsetTop - 140;
+
+            const sectionHeight =
+                section.offsetHeight;
 
             if (
                 window.scrollY >= sectionTop &&
-                window.scrollY < sectionTop + sectionHeight
+                window.scrollY <
+                    sectionTop + sectionHeight
             ) {
-                currentSection = section.getAttribute("id");
+
+                currentSection =
+                    section.getAttribute("id");
+
             }
 
         });
+
 
         navLinks.forEach(link => {
 
             link.classList.remove("active");
 
             if (
-                link.getAttribute("href") === `#${currentSection}`
+                link.getAttribute("href") ===
+                `#${currentSection}`
             ) {
+
                 link.classList.add("active");
+
             }
 
         });
 
     };
+
 
     window.addEventListener(
         "scroll",
@@ -50,18 +92,18 @@ document.addEventListener("DOMContentLoaded", () => {
         { passive: true }
     );
 
+
     updateActiveNavigation();
 
 
     /* =====================================================
-       02. NAVBAR SCROLL EFFECT
+       03. GLASS NAVBAR SCROLL EFFECT
     ===================================================== */
-
-    const navbar = document.querySelector(".navbar");
 
     const updateNavbar = () => {
 
         if (!navbar) return;
+
 
         if (window.scrollY > 40) {
 
@@ -75,30 +117,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
     };
 
+
     window.addEventListener(
         "scroll",
         updateNavbar,
         { passive: true }
     );
 
+
     updateNavbar();
 
 
     /* =====================================================
-       03. SCROLL REVEAL ANIMATION
+       04. SCROLL REVEAL
     ===================================================== */
 
-    const revealElements = document.querySelectorAll(
-        ".section-heading, " +
-        ".about-main, " +
-        ".about-focus, " +
-        ".timeline-item, " +
-        ".project-card, " +
-        ".playbook-card, " +
-        ".skill-group, " +
-        ".service-card, " +
-        ".contact-container"
-    );
+    const revealElements =
+        document.querySelectorAll(
+            ".section-heading, " +
+            ".about-main, " +
+            ".about-focus, " +
+            ".timeline-item, " +
+            ".project-card, " +
+            ".playbook-card, " +
+            ".skill-group, " +
+            ".service-card, " +
+            ".contact-container"
+        );
 
 
     revealElements.forEach(element => {
@@ -108,98 +153,98 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-    const revealObserver = new IntersectionObserver(
+    if ("IntersectionObserver" in window) {
 
-        entries => {
+        const revealObserver =
+            new IntersectionObserver(
 
-            entries.forEach(entry => {
+                entries => {
 
-                if (entry.isIntersecting) {
+                    entries.forEach(entry => {
 
-                    entry.target.classList.add("visible");
+                        if (
+                            entry.isIntersecting
+                        ) {
 
-                    revealObserver.unobserve(entry.target);
+                            entry.target
+                                .classList
+                                .add("visible");
 
+                            revealObserver
+                                .unobserve(
+                                    entry.target
+                                );
+
+                        }
+
+                    });
+
+                },
+
+                {
+                    threshold: 0.12,
+
+                    rootMargin:
+                        "0px 0px -50px 0px"
                 }
 
-            });
+            );
 
-        },
 
-        {
-            threshold: 0.12,
-            rootMargin: "0px 0px -50px 0px"
+        revealElements.forEach(element => {
+
+            revealObserver.observe(element);
+
+        });
+
+    } else {
+
+        revealElements.forEach(element => {
+
+            element.classList.add("visible");
+
+        });
+
+    }
+
+
+    /* =====================================================
+       05. STAGGER PROJECT CARDS
+    ===================================================== */
+
+    projectCards.forEach(
+        (card, index) => {
+
+            card.style.transitionDelay =
+                `${index * 70}ms`;
+
         }
-
     );
-
-
-    revealElements.forEach(element => {
-
-        revealObserver.observe(element);
-
-    });
 
 
     /* =====================================================
-       04. STAGGER PROJECT CARDS
+       06. STAGGER SERVICE CARDS
     ===================================================== */
 
-    const projectCards = document.querySelectorAll(
-        ".project-card"
+    serviceCards.forEach(
+        (card, index) => {
+
+            card.style.transitionDelay =
+                `${index * 70}ms`;
+
+        }
     );
-
-
-    projectCards.forEach((card, index) => {
-
-        card.style.transitionDelay =
-            `${index * 70}ms`;
-
-    });
 
 
     /* =====================================================
-       05. STAGGER SERVICE CARDS
+       07. ANIMATED STATISTICS
     ===================================================== */
-
-    const serviceCards = document.querySelectorAll(
-        ".service-card"
-    );
-
-
-    serviceCards.forEach((card, index) => {
-
-        card.style.transitionDelay =
-            `${index * 70}ms`;
-
-    });
-
-
-    /* =====================================================
-       06. ANIMATED STATISTICS
-    ===================================================== */
-
-    const statElements = document.querySelectorAll(
-        ".stat-item strong"
-    );
-
 
     const animateCounter = element => {
 
         const originalText =
             element.textContent.trim();
 
-
-        /*
-         * Extract numeric portion.
-         *
-         * Examples:
-         * 3000+
-         * 100+
-         * 50+
-         * 99%+
-         * 8.6+
-         */
 
         const numberMatch =
             originalText.match(/[\d.]+/);
@@ -212,79 +257,90 @@ document.addEventListener("DOMContentLoaded", () => {
             parseFloat(numberMatch[0]);
 
 
+        const numberStart =
+            originalText.indexOf(
+                numberMatch[0]
+            );
+
+
         const prefix =
             originalText.substring(
                 0,
-                originalText.indexOf(numberMatch[0])
+                numberStart
             );
 
 
         const suffix =
             originalText.substring(
-                originalText.indexOf(numberMatch[0]) +
+                numberStart +
                 numberMatch[0].length
             );
 
 
         const decimalPlaces =
             numberMatch[0].includes(".")
-                ? numberMatch[0].split(".")[1].length
+                ? numberMatch[0]
+                    .split(".")[1].length
                 : 0;
 
 
         const duration = 1400;
 
-        const startTime = performance.now();
+        const startTime =
+            performance.now();
 
 
-        const updateCounter = currentTime => {
+        const updateCounter =
+            currentTime => {
 
-            const elapsed =
-                currentTime - startTime;
-
-
-            const progress =
-                Math.min(
-                    elapsed / duration,
-                    1
-                );
+                const elapsed =
+                    currentTime -
+                    startTime;
 
 
-            /*
-             * Ease-out effect
-             */
-
-            const easedProgress =
-                1 - Math.pow(
-                    1 - progress,
-                    3
-                );
+                const progress =
+                    Math.min(
+                        elapsed /
+                            duration,
+                        1
+                    );
 
 
-            const currentValue =
-                target * easedProgress;
+                const easedProgress =
+                    1 -
+                    Math.pow(
+                        1 - progress,
+                        3
+                    );
 
 
-            element.textContent =
-                prefix +
-                currentValue.toFixed(decimalPlaces) +
-                suffix;
+                const currentValue =
+                    target *
+                    easedProgress;
 
-
-            if (progress < 1) {
-
-                requestAnimationFrame(
-                    updateCounter
-                );
-
-            } else {
 
                 element.textContent =
-                    originalText;
+                    prefix +
+                    currentValue.toFixed(
+                        decimalPlaces
+                    ) +
+                    suffix;
 
-            }
 
-        };
+                if (progress < 1) {
+
+                    requestAnimationFrame(
+                        updateCounter
+                    );
+
+                } else {
+
+                    element.textContent =
+                        originalText;
+
+                }
+
+            };
 
 
         requestAnimationFrame(
@@ -294,11 +350,11 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
 
-    const statsSection =
-        document.querySelector(".stats");
-
-
-    if (statsSection) {
+    if (
+        statsSection &&
+        statElements.length &&
+        "IntersectionObserver" in window
+    ) {
 
         const statsObserver =
             new IntersectionObserver(
@@ -307,15 +363,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     entries.forEach(entry => {
 
-                        if (entry.isIntersecting) {
+                        if (
+                            entry.isIntersecting
+                        ) {
 
                             statElements.forEach(
                                 animateCounter
                             );
 
-                            statsObserver.unobserve(
-                                entry.target
-                            );
+
+                            statsObserver
+                                .unobserve(
+                                    entry.target
+                                );
 
                         }
 
@@ -338,7 +398,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =====================================================
-       07. SMOOTH INTERNAL LINKS
+       08. SMOOTH INTERNAL LINKS
     ===================================================== */
 
     const internalLinks =
@@ -354,14 +414,18 @@ document.addEventListener("DOMContentLoaded", () => {
             event => {
 
                 const targetId =
-                    link.getAttribute("href");
+                    link.getAttribute(
+                        "href"
+                    );
 
 
                 if (
                     !targetId ||
                     targetId === "#"
                 ) {
+
                     return;
+
                 }
 
 
@@ -378,8 +442,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
                 target.scrollIntoView({
+
                     behavior: "smooth",
+
                     block: "start"
+
                 });
 
             }
@@ -389,14 +456,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =====================================================
-       08. TERMINAL TYPING EFFECT
+       09. TERMINAL TYPING EFFECT
     ===================================================== */
-
-    const terminalStatus =
-        document.querySelector(
-            ".terminal-success"
-        );
-
 
     if (terminalStatus) {
 
@@ -425,6 +486,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 characterIndex++;
 
+
                 setTimeout(
                     typeStatus,
                     45
@@ -444,14 +506,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =====================================================
-       09. TERMINAL CARD MOUSE PARALLAX
+       10. TERMINAL CARD PARALLAX
     ===================================================== */
-
-    const terminalCard =
-        document.querySelector(
-            ".terminal-card"
-        );
-
 
     if (terminalCard) {
 
@@ -459,33 +515,38 @@ document.addEventListener("DOMContentLoaded", () => {
             "mousemove",
             event => {
 
-                /*
-                 * Disable effect on small screens.
-                 */
+                if (
+                    window.innerWidth < 800
+                ) {
 
-                if (window.innerWidth < 800) {
                     return;
+
                 }
 
 
                 const rect =
-                    terminalCard.getBoundingClientRect();
+                    terminalCard
+                        .getBoundingClientRect();
 
 
                 const x =
-                    event.clientX - rect.left;
+                    event.clientX -
+                    rect.left;
 
 
                 const y =
-                    event.clientY - rect.top;
+                    event.clientY -
+                    rect.top;
 
 
                 const rotateY =
-                    ((x / rect.width) - 0.5) * 5;
+                    ((x / rect.width) -
+                        0.5) * 5;
 
 
                 const rotateX =
-                    ((y / rect.height) - 0.5) * -5;
+                    ((y / rect.height) -
+                        0.5) * -5;
 
 
                 terminalCard.style.transform =
@@ -511,7 +572,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =====================================================
-       10. PROJECT CARD HOVER
+       11. PROJECT CARD INTERACTION
     ===================================================== */
 
     projectCards.forEach(card => {
@@ -543,28 +604,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /* =====================================================
-       11. CURRENT YEAR
+       12. CURRENT YEAR
     ===================================================== */
 
-    const footerYear =
-        document.querySelector(
+    const footerParagraphs =
+        document.querySelectorAll(
             ".footer p"
         );
 
 
-    if (footerYear) {
+    if (footerParagraphs.length) {
 
-        footerYear.innerHTML =
-            footerYear.innerHTML.replace(
-                "2026",
-                new Date().getFullYear()
-            );
+        footerParagraphs.forEach(
+            paragraph => {
+
+                paragraph.innerHTML =
+                    paragraph.innerHTML.replace(
+                        /©\s*2026/,
+                        `© ${new Date()
+                            .getFullYear()}`
+                    );
+
+            }
+        );
 
     }
 
 
     /* =====================================================
-       12. EXTERNAL LINKS
+       13. EXTERNAL LINKS
     ===================================================== */
 
     const externalLinks =
@@ -584,22 +652,27 @@ document.addEventListener("DOMContentLoaded", () => {
                 "_blank"
             );
 
-            link.setAttribute(
-                "rel",
-                "noopener noreferrer"
-            );
-
         }
+
+
+        link.setAttribute(
+            "rel",
+            "noopener noreferrer"
+        );
 
     });
 
 
     /* =====================================================
-       13. PAGE LOADED
+       14. PAGE LOADED
     ===================================================== */
 
-    document.body.classList.add(
-        "page-loaded"
-    );
+    requestAnimationFrame(() => {
+
+        document.body.classList.add(
+            "page-loaded"
+        );
+
+    });
 
 });
