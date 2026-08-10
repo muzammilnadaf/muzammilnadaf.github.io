@@ -2645,3 +2645,110 @@ p {
     }
 
 }
+
+/* =========================================================
+   TERMINAL 3D TILT
+========================================================= */
+
+.terminal-card {
+    position: relative;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    will-change: transform;
+
+    transition:
+        transform 0.12s ease-out,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+}
+
+
+/* Keep the contents visually attached to the card */
+
+.terminal-card > * {
+    transform: translateZ(1px);
+}
+
+
+/* Freelance typing text */
+
+#freelance-status {
+    min-height: 24px;
+    display: block;
+
+    color: var(--success);
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+/* Typing cursor */
+
+#freelance-status.typing::after {
+    content: "";
+    display: inline-block;
+
+    width: 7px;
+    height: 15px;
+
+    margin-left: 5px;
+
+    vertical-align: -2px;
+
+    background: var(--success);
+
+    animation:
+        freelanceCursor 0.75s
+        steps(1)
+        infinite;
+}
+
+
+@keyframes freelanceCursor {
+
+    0%,
+    50% {
+        opacity: 1;
+    }
+
+    51%,
+    100% {
+        opacity: 0;
+    }
+}
+
+
+/* Remove cursor after typing */
+
+#freelance-status.typed::after {
+    content: none;
+}
+
+
+/* Stronger visual feedback while hovering */
+
+.terminal-card.is-tilting {
+    border-color:
+        rgba(56, 189, 248, 0.35);
+
+    box-shadow:
+        0 30px 70px rgba(0, 0, 0, 0.30),
+        0 0 35px rgba(56, 189, 248, 0.08);
+}
+
+
+/* Don't use the effect on touch/mobile devices */
+
+@media (max-width: 799px) {
+
+    .terminal-card {
+        transform:
+            perspective(1000px)
+            rotateX(0deg)
+            rotateY(0deg)
+            translateZ(0) !important;
+    }
+
+}
